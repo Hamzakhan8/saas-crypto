@@ -7,7 +7,7 @@ if (!isset($_SESSION['user_id'])) {
 
 // Check user role
 if ($_SESSION['role'] !== 'admin' && $_SESSION['role'] !== 'superadmin') {
-    die("Access denied.");
+    die("Access deny please contact admin staff ");
 }
 
 // Database connection
@@ -60,6 +60,9 @@ mysqli_close($conn);
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link active" href="index.php"><i class="fa fa-home"></i> Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="roleeditor.php"><i class="fa fa-user"></i>Role Editor</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>

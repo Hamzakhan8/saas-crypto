@@ -5,6 +5,8 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
+$error_message = ""; // Initialize error message variable
+
 // Handle login
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = mysqli_real_escape_string($conn, $_POST['username']);
@@ -22,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: index.php"); // Redirect to the main page
         exit();
     } else {
-        echo "Invalid username or password.";
+        $error_message = "Invalid username or password."; // Set error message
     }
     $stmt->close();
 }
@@ -54,6 +56,9 @@ mysqli_close($conn);
 <body>
     <div class="container d-flex align-items-center justify-content-center" style="height: 100vh;">
         <div class="login-container">
+            <?php if ($error_message): ?>
+                <div class='alert alert-danger'><?php echo $error_message; ?></div> <!-- Show error message in login container -->
+            <?php endif; ?>
             <h2 class="text-center mb-4">Login</h2>
             <form action="login.php" method="post">
                 <div class="mb-3">
