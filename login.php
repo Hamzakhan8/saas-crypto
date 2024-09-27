@@ -33,15 +33,43 @@ mysqli_close($conn);
 <html lang="en">
 <head>
     <title>Login</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('https://source.unsplash.com/random/1920x1080');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+        }
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.5); /* Black border for visibility */
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
-    <form action="login.php" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit">Login</button>
-    </form>
+    <div class="container d-flex align-items-center justify-content-center" style="height: 100vh;">
+        <div class="login-container">
+            <h2 class="text-center mb-4">Login</h2>
+            <form action="login.php" method="post">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username:</label>
+                    <input type="text" id="username" name="username" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password:</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+            <div class="mt-3 text-center">
+                <p>If not registered, click <a href="register.php">here</a> to register.</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

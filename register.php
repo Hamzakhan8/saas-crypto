@@ -27,26 +27,43 @@ mysqli_close($conn);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('https://source.unsplash.com/random/1920x1080');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+        }
+        .register-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.5); /* Black border for visibility */
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
-    <div class="form-wrapper">
-        <div class="form-container">
-            <h2>Create Your Account</h2>
+    <div class="container d-flex align-items-center justify-content-center" style="height: 100vh;">
+        <div class="register-container">
+            <h2 class="text-center mb-4">Register</h2>
             <form action="register.php" method="post">
-                <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username:</label>
+                    <input type="text" id="username" name="username" class="form-control" required>
                 </div>
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password:</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
                 </div>
-                <button type="submit">Register</button>
+                <button type="submit" class="btn btn-primary w-100">Register</button>
             </form>
+            <div class="mt-3 text-center">
+                <p>If already registered, click <a href="login.php">here</a> to login.</p>
+            </div>
         </div>
     </div>
 </body>
