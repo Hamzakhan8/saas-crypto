@@ -1,0 +1,192 @@
+/* Body background */
+body {
+    background-color: #f0f4f8; /* Light neutral background for better contrast */
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Sidebar - Glassmorphism effect */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.8); /* Slightly transparent white for glassmorphism */
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border for separation */
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, width 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar.closed {
+    transform: translateX(-100%);
+}
+
+.sidebar h2 {
+    margin: 1rem 0 1.5rem;
+    padding: 0 1rem;
+    font-size: 1.5rem;
+    color: #2c3e50; /* Darker shade for better readability */
+}
+
+.sidebar .nav-link {
+    color: #34495e; /* Modern dark blue for a clean look */
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s;
+}
+
+.sidebar .nav-link:hover, .sidebar .nav-link.active {
+    color: #fff;
+    background: #0C6EFD; /* Light green hover effect */
+    border-radius: 5px;
+}
+
+
+
+.sidebar .nav-link[data-bs-toggle="collapse"] .fa-chevron-down {
+    transition: transform 0.3s ease;
+}
+
+.sidebar .nav-link[aria-expanded="true"] .fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+.sidebar .btn-danger {
+    margin: 1rem;
+    width: calc(100% - 2rem);
+    background-color: #e74c3c; /* Bright red for emphasis */
+}
+
+/* Content area padding to align with fixed sidebar */
+.content {
+    margin-left: 250px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+    background-color: #ecf0f1; /* Soft light background to contrast sidebar */
+}
+
+.content.collapsed {
+    margin-left: 0;
+}
+
+/* Navbar styling */
+.navbar {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.8); /* Glass effect */
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.navbar .navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #2980b9; /* Bright blue for modern branding */
+}
+
+/* Glass Effect for Cards */
+.glass-card {
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent white for glass effect */
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card-header {
+    font-weight: 600;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    color: #2c3e50; /* Darker color for better readability */
+}
+
+/* Hover effect for cards */
+.glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        transform: translateX(-100%);
+    }
+
+    .sidebar.closed {
+        transform: translateX(0);
+    }
+
+    .content {
+        margin-left: 0;
+    }
+
+    .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 1001;
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar h2 {
+        font-size: 1.25rem;
+        color: #2c3e50;
+    }
+
+    .navbar .navbar-brand {
+        font-size: 1.25rem;
+        color: #2980b9;
+    }
+}
+
+#analyticsSubmenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+#analyticsSubmenu.show {
+    max-height: 500px;
+    transition: max-height 0.3s ease-in;
+}
+
+/* Sidebar submenu styling */
+.sidebar .submenu {
+    padding-left: 0;
+    margin-top: 0.5rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar .submenu .nav-link {
+    font-size: 0.9rem;
+    color: rgba(44, 62, 80, 0.8); /* Lightened dark blue for submenu */
+    transition: all 0.3s ease;
+}
+
+.sidebar .submenu .nav-link:hover {
+    color: #2c3e50; /* Hover effect with dark blue */
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar .nav-link[data-bs-toggle="collapse"] {
+    position: relative;
+}
+
+.sidebar .submenu-icon {
+    transition: transform 0.3s ease;
+}
+
+.sidebar .nav-link[data-bs-toggle="collapse"][aria-expanded="true"] .submenu-icon {
+    transform: rotate(180deg);
+}
+
+/* Ensure submenu is aligned with sidebar content */
+.sidebar .nav-item {
+    width: 100%;
+}
+
+.sidebar .collapse {
+    width: 100%;
+}
