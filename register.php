@@ -1,26 +1,44 @@
 <?php
+session_start();
 // Database connection
 $conn = mysqli_connect("localhost", "root", "", "test_crypto");
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
+$error_message = ""; // Initialize error message variable
+
 // Handle registration
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = mysqli_real_escape_string($conn, $_POST['username']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password
-    $role = 'user'; // Default role
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-    $stmt = $conn->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $username, $password, $role);
+    // Check if username already exists
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if ($stmt->execute()) {
-        header("Location: index.php");
+    if ($result->num_rows > 0) {
+        $error_message = "Username already exists. Please choose a different username.";
     } else {
-        echo "Error: " . $stmt->error;
+        // Proceed with user registration
+        $stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT); // Hash the password
+        $stmt->bind_param("ss", $username, $hashed_password);
+        
+        if ($stmt->execute()) {
+            // Registration successful
+            header("Location: login.php");
+            exit();
+        } else {
+            $error_message = "Registration failed. Please try again.";
+        }
     }
+
     $stmt->close();
 }
+
 mysqli_close($conn);
 ?>
 
@@ -57,7 +75,7 @@ mysqli_close($conn);
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password:</label>
-                    <input type="password" id="password" name="password" class="form-control" required>
+                    <input type="password" id="password" name="password" class="form-control" >
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Register</button>
             </form>
