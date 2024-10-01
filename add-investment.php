@@ -9,6 +9,10 @@ error_reporting(E_ALL);
 
 
 <?php
+// Initialize variables for messages
+$success_message = "";
+$error_message = ""; // New variable for error messages
+
 // Check if the form has been submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Connect to the database
@@ -30,12 +34,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("sddd", $crypto_name, $amount_invested, $current_value, $profit_loss);
 
     if ($stmt->execute()) {
-        // If successful, redirect to a success page or the same page
+        // Set success message
+        $success_message = "Investment added successfully!";
         header("Location: add-investment.php"); // Adjust the redirection as needed
         exit();
     } else {
-        // Added error reporting
-        echo "Error: " . $stmt->error; // Display the error
+        // Set error message
+        $error_message = "Error: " . $stmt->error; // Store the error message
     }
 
     // Close statement and connection
@@ -86,6 +91,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="container">
+        <!-- New div for messages -->
+        <div id="message" style="display: <?php echo $success_message || $error_message ? 'block' : 'none'; ?>; background-color: <?php echo $success_message ? '#d4edda' : '#f8d7da'; ?>; color: <?php echo $success_message ? '#155724' : '#721c24'; ?>; padding: 10px; border: 1px solid <?php echo $success_message ? '#c3e6cb' : '#f5c6cb'; ?>; border-radius: 5px; margin-bottom: 20px;">
+            <?php echo $success_message ?: $error_message; ?> <!-- Display success or error message -->
+        </div>
         <h2>Crypto Investment Dashboard</h2>
         <div class="form-group">
             <h3>Insert Data</h3>
