@@ -35,6 +35,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['a
     $stmt->close();
 }
 
+// Handle form submission for editing an investment
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'edit') {
+    $id = (int) $_POST['id'];
+    $crypto_name = mysqli_real_escape_string($conn, $_POST['crypto_name']);
+    $amount_invested = (float) mysqli_real_escape_string($conn, $_POST['amount_invested']);
+    $current_value = (float) mysqli_real_escape_string($conn, $_POST['current_value']);
+    $date_invested = mysqli_real_escape_string($conn, $_POST['date_invested']);
+    $profit = $current_value + $amount_invested;
+    $loss = $amount_invested - $current_value;
+    $stmt = $conn->prepare("UPDATE investments SET crypto_name=?, amount_invested=?, current_value=?, profit=?, loss=?, date_invested=? WHERE id=?");
+    $stmt->bind_param("sddddsi", $crypto_name, $amount_invested, $current_value, $profit, $loss, $date_invested, $id);
+
+    if ($stmt->execute()) {
+        echo "Investment updated successfully!";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+    $stmt->close();
+}
+
+// Fetch investment details for editing
+if (isset($_GET['id'])) {
+    $id = (int) $_GET['id'];
+    $stmt = $conn->prepare("SELECT * FROM investments WHERE id=?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $investment = $result->fetch_assoc();
+    $stmt->close();
+}
+
 // Fetch all investments
 $result = mysqli_query($conn, "SELECT * FROM investments");
 $investments = mysqli_fetch_all($result, MYSQLI_ASSOC);

@@ -49,27 +49,38 @@ mysqli_close($conn);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container mt-5">
-        <h2>User Profile</h2>
-        <?php if ($user): ?>
-            <form method="post">
-                <div class="mb-3">
-                    <label for="username" class="form-label">Name:</label>
-                    <input type="text" id="username" name="username" class="form-control" value="<?= htmlspecialchars($user['username']) ?>" required>
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password:</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Leave blank to keep current password">
-                </div>
-                <button type="submit" class="btn btn-primary">Update Profile</button>
-            </form>
-        <?php else: ?>
-            <p class="text-danger">User not found. Please check your session or contact support.</p>
-        <?php endif; ?>
-        <a href="index.php" class="btn btn-secondary mt-3">Back to Dashboard</a>
+    <div class="d-flex">
+        <?php include 'include/sidebar.php'; ?>
+        
+        <div class="content flex-grow-1">
+            <?php include 'include/navbar.php'; ?>
+            <!-- Main content goes here -->
+            <main class="container mt-5">
+                <h2>User Profile</h2>
+                <?php if ($user): ?>
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Name:</label>
+                            <input type="text" id="username" name="username" class="form-control" value="<?= htmlspecialchars($user['username']) ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password:</label>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Leave blank to keep current password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                    </form>
+                <?php else: ?>
+                    <p class="text-danger">User not found. Please check your session or contact support.</p>
+                <?php endif; ?>
+                <a href="index.php" class="btn btn-secondary mt-3">Back to Dashboard</a>
+            </main>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -1,78 +1,63 @@
 <?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
 // Database connection
 $conn = mysqli_connect("localhost", "root", "", "test_crypto");
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-// Fetch the investment to edit
+// Fetch investment details for editing
 if (isset($_GET['id'])) {
-    $id = (int)$_GET['id'];
-    $result = mysqli_query($conn, "SELECT * FROM investments WHERE id = $id");
-    $investment = mysqli_fetch_assoc($result);
-    if (!$investment) {
-        die("Investment not found.");
-    }
-}
-
-// Handle form submission for updating the investment
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id = (int)$_POST['id'];
-    $crypto_name = mysqli_real_escape_string($conn, $_POST['crypto_name']);
-    $amount_invested = (float)mysqli_real_escape_string($conn, $_POST['amount_invested']);
-    $current_value = (float)mysqli_real_escape_string($conn, $_POST['current_value']);
-    $date_invested = mysqli_real_escape_string($conn, $_POST['date_invested']);
-    $profit_loss = $current_value - $amount_invested;
-
-    $stmt = $conn->prepare("UPDATE investments SET crypto_name = ?, amount_invested = ?, current_value = ?, profit_loss = ?, date_invested = ? WHERE id = ?");
-    $stmt->bind_param("sdddsd", $crypto_name, $amount_invested, $current_value, $profit_loss, $date_invested, $id);
-
-    if ($stmt->execute()) {
-        echo "Investment updated successfully!";
-        header("Location: index.php");
-        exit();
-    } else {
-        echo "Error: " . $stmt->error;
-    }
+    $id = (int) $_GET['id'];
+    $stmt = $conn->prepare("SELECT * FROM investments WHERE id=?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $investment = $result->fetch_assoc();
     $stmt->close();
+} else {
+    die("Invalid investment ID.");
 }
-mysqli_close($conn);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Investment</title>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="dashboard">
-        <header>
-            <h1>Edit Investment</h1>
-        </header>
-        <main>
-            <form action="edit_investment.php" method="post">
-                <input type="hidden" name="id" value="<?= $investment['id'] ?>">
-                <div class="form-group">
-                    <label for="crypto-name">Crypto Name:</label>
-                    <input type="text" id="crypto-name" name="crypto_name" value="<?= htmlspecialchars($investment['crypto_name']) ?>" required>
-                </div>
-                <div class="form-group">
-                    <label for="amount-invested">Amount Invested ($):</label>
-                    <input type="number" id="amount-invested" name="amount_invested" value="<?= $investment['amount_invested'] ?>" step="0.01" required>
-                </div>
-                <div class="form-group">
-                    <label for="current-value">Current Value ($):</label>
-                    <input type="number" id="current-value" name="current_value" value="<?= $investment['current_value'] ?>" step="0.01" required>
-                </div>
-                <div class="form-group">
-                    <label for="date-invested">Date Invested:</label>
-                    <input type="date" id="date-invested" name="date_invested" value="<?= $investment['date_invested'] ?>" required>
-                </div>
-                <button type="submit" class="submit-btn">Update Investment</button>
-            </form>
-        </main>
+    <div class="container mt-5">
+        <h2>Edit Investment</h2>
+        <form action="index.php" method="post">
+            <input type="hidden" name="action" value="edit">
+            <input type="hidden" name="id" value="<?= $investment['id'] ?>">
+            <div class="form-group mb-3">
+                <label for="crypto-name">Crypto Name:</label>
+                <input type="text" id="crypto-name" name="crypto_name" class="form-control" value="<?= htmlspecialchars($investment['crypto_name']) ?>" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="amount-invested">Amount Invested ($):</label>
+                <input type="number" id="amount-invested" name="amount_invested" class="form-control" value="<?= $investment['amount_invested'] ?>" step="0.01" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="current-value">Current Value ($):</label>
+                <input type="number" id="current-value" name="current_value" class="form-control" value="<?= $investment['current_value'] ?>" step="0.01" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="date-invested">Date Invested:</label>
+                <input type="date" id="date-invested" name="date_invested" class="form-control" value="<?= $investment['date_invested'] ?>" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Investment</button>
+        </form>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
