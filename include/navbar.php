@@ -1,8 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
     <div class="container-fluid">
-        <button class="btn btn-outline-primary" id="sidebarToggle">
-            <span id="toggleIcon">☰</span>
-        </button>
+                    <button class="btn btn-outline-primary" id="sidebarToggle">
+                        <span id="toggleIcon">☰</span>
+                    </button>
         <a class="navbar-brand ms-3" href="#">Crypto Investment Dashboard</a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
