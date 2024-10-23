@@ -5,6 +5,11 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Check user role
+if ($_SESSION['role'] !== 'admin' && $_SESSION['role'] !== 'superadmin') {
+    die("Access denied. Please contact admin staff.");
+}
+
 // Database connection
 $conn = mysqli_connect("localhost", "root", "", "test_crypto");
 if (!$conn) {
@@ -32,32 +37,46 @@ if (isset($_GET['id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Investment</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container mt-5">
-        <h2>Edit Investment</h2>
-        <form action="index.php" method="post">
-            <input type="hidden" name="action" value="edit">
-            <input type="hidden" name="id" value="<?= $investment['id'] ?>">
-            <div class="form-group mb-3">
-                <label for="crypto-name">Crypto Name:</label>
-                <input type="text" id="crypto-name" name="crypto_name" class="form-control" value="<?= htmlspecialchars($investment['crypto_name']) ?>" required>
-            </div>
-            <div class="form-group mb-3">
-                <label for="amount-invested">Amount Invested ($):</label>
-                <input type="number" id="amount-invested" name="amount_invested" class="form-control" value="<?= $investment['amount_invested'] ?>" step="0.01" required>
-            </div>
-            <div class="form-group mb-3">
-                <label for="current-value">Current Value ($):</label>
-                <input type="number" id="current-value" name="current_value" class="form-control" value="<?= $investment['current_value'] ?>" step="0.01" required>
-            </div>
-            <div class="form-group mb-3">
-                <label for="date-invested">Date Invested:</label>
-                <input type="date" id="date-invested" name="date_invested" class="form-control" value="<?= $investment['date_invested'] ?>" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Update Investment</button>
-        </form>
+    <div class="d-flex">
+        <?php include 'sidebar.php'; ?>
+
+        <div class="content flex-grow-1">
+            <?php include 'navbar.php'; ?>
+
+            <main>
+                <div class="container mt-4">
+                    <h2>Edit Investment</h2>
+                    <form action="index.php" method="post" class="p-4">
+                        <input type="hidden" name="action" value="edit">
+                        <input type="hidden" name="id" value="<?= $investment['id'] ?>">
+                        <div class="form-group mb-3">
+                            <label for="crypto-name">Crypto Name:</label>
+                            <input type="text" id="crypto-name" name="crypto_name" class="form-control" value="<?= htmlspecialchars($investment['crypto_name']) ?>" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="amount-invested">Amount Invested ($):</label>
+                            <input type="number" id="amount-invested" name="amount_invested" class="form-control" value="<?= $investment['amount_invested'] ?>" step="0.01" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="current-value">Current Value ($):</label>
+                            <input type="number" id="current-value" name="current_value" class="form-control" value="<?= $investment['current_value'] ?>" step="0.01" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="date-invested">Date Invested:</label>
+                            <input type="date" id="date-invested" name="date_invested" class="form-control" value="<?= $investment['date_invested'] ?>" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Investment</button>
+                        <a href="index.php" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </main>
+        </div>
     </div>
+    <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

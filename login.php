@@ -24,7 +24,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: index.php"); // Redirect to the main page
         exit();
     } else {
-        $error_message = "Invalid username or password."; // Set error message
+        if (!$user) {
+            $error_message = "User not found.";
+        } else if (!password_verify($password, $user['password'])) {
+            $error_message = "Incorrect password.";
+            // Add debugging information
+            error_log("Password verification failed for user: " . $username);
+            error_log("Provided password: " . $password);
+            error_log("Stored hash: " . $user['password']);
+        } else {
+            $error_message = "An unexpected error occurred.";
+        }
+        // Add debugging information
+        error_log("Login attempt failed for username: " . $username);
     }
     $stmt->close();
 }
