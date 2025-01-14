@@ -70,6 +70,47 @@ if (isset($_GET['id'])) {
 $result = mysqli_query($conn, "SELECT * FROM investments");
 $investments = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
+// Handle form submission for adding a new trade
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'add_trade') {
+    $coin_name = mysqli_real_escape_string($conn, $_POST['coin_name']);
+    $rr_percentage = (float) mysqli_real_escape_string($conn, $_POST['rr_percentage']);
+    $total = (float) mysqli_real_escape_string($conn, $_POST['total']);
+    $trade_time = mysqli_real_escape_string($conn, $_POST['trade_time']);
+    
+    $stmt = $conn->prepare("INSERT INTO trades (coin_name, rr_percentage, total, trade_time) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("sdds", $coin_name, $rr_percentage, $total, $trade_time);
+
+    if ($stmt->execute()) {
+        echo "Trade added successfully!";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+    $stmt->close();
+}
+
+// Handle form submission for editing a trade
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == 'edit_trade') {
+    $id = (int) $_POST['id'];
+    $coin_name = mysqli_real_escape_string($conn, $_POST['coin_name']);
+    $rr_percentage = (float) mysqli_real_escape_string($conn, $_POST['rr_percentage']);
+    $total = (float) mysqli_real_escape_string($conn, $_POST['total']);
+    $trade_time = mysqli_real_escape_string($conn, $_POST['trade_time']);
+    
+    $stmt = $conn->prepare("UPDATE trades SET coin_name=?, rr_percentage=?, total=?, trade_time=? WHERE id=?");
+    $stmt->bind_param("sddsi", $coin_name, $rr_percentage, $total, $trade_time, $id);
+
+    if ($stmt->execute()) {
+        echo "Trade updated successfully!";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+    $stmt->close();
+}
+
+// Fetch all trades
+$result = mysqli_query($conn, "SELECT * FROM trades");
+$trades = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
 // Close the connection
 mysqli_close($conn);
 ?>
